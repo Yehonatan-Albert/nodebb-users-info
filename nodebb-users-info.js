@@ -30,22 +30,24 @@ $(window).on('action:ajaxify.end', () => {
 
         const yn = c => c ? 'כן' : 'לא'
 
+        const link = (href, text = href, blank = true) => `<a href="${href}" target="${blank ? '_blank' : '_self'}">${text}</a>`
+
         require(['autocomplete'], a => a.user(input, (ev, ui) => $.getJSON(`/api/user/${ui.item.user.userslug}`, d => {
             input.blur()
             $('.removeFromTable').remove()
-            btnProfile.text(`הפרופיל של${d.isSelf ? 'י' : ` ${utils.decodeHTMLEntities(d.username)}`}`).attr('href', `/user/${d.userslug}`).add('hr').css('display', 'block')
+            btnProfile.text(`הפרופיל של${d.isSelf ? 'י' : ` ${utils.decodeHTMLEntities(d.username)}`}`).attr('href', d.url).add('hr').css('display', 'block')
 
             addToTable('מזהה משתמש', d.uid)
             addToTable('שם משתמש', d.username)
             addToTable('תיוג משתמש', `@${d.userslug}`)
-            addToTable.if('דוא"ל', `<a href="mailto:${d.email}">${d.email}</a>`, d.email)
+            addToTable.if('דוא"ל', link(`mailto:${d.email}`, d.email), d.email)
             addToTable('דוא"ל אומת', yn(d["email:confirmed"]))
-            addToTable.if('תמונת פרופיל', `<img class="avatar avatar-xl" src="${d.picture}">`, d.picture)
+            addToTable.if(link(d.picture, 'תמונת פרופיל'), `<img class="avatar avatar-xl" src="${d.picture}">`, d.picture)
             addToTable('סמל', `<div class="avatar avatar-xl" style="background:${d["icon:bgColor"]}">${d["icon:text"]}</div>`)
             addToTable.if('שם מלא', d.fullname)
             addToTable.if('מיקום', d.location)
             addToTable.if('יום הולדת', d.birthday)
-            addToTable.if('אתר', `<a href="${d.website}">${d.website}</a>`, d.website)
+            addToTable.if('אתר', link(d.website), d.website)
             if (d.aboutme && d.aboutmeParsed) {
                 addToTable('אודותיי - מקור', d.aboutme)
                 addToTable('אודותיי - תצוגה', `<span class="text-center aboutme">${d.aboutmeParsed}</span>`)
@@ -54,19 +56,21 @@ $(window).on('action:ajaxify.end', () => {
             addToTable.if('גיל', d.age)
             addToTable('מורחק', yn(d.banned))
             addToTable('מצב', d.status == 'online' ? 'מחובר' : d.status == 'away' ? 'לא נמצא' : d.status == 'dnd' ? 'נא לא להפריע' : 'מנותק')
-            addToTable.if('תמונת רקע', `<img src="${d["cover:url"]}" width="50%">`, d["cover:url"] != '/assets/images/cover-default.png')
+            addToTable.if(link(d["cover:url"], 'תמונת רקע'), `<img src="${d["cover:url"]}" width="50%">`, d["cover:url"] != '/assets/images/cover-default.png')
             addToTable('מוניטין', utils.addCommas(d.reputation))
             addToTable('צפיות בפרופיל', utils.addCommas(d.profileviews))
-            addToTable('פוסטים', utils.addCommas(d.counts.posts))
+            addToTable(link(`${d.url}/posts`, 'פוסטים'), utils.addCommas(d.counts.posts))
             // addToTable.if('פוסטים - כולל מחוקים', utils.addCommas(d.postcount), d.counts.posts != d.postcount)
-            addToTable('נושאים', utils.addCommas(d.counts.topics))
+            addToTable(link(`${d.url}/topics`, 'נושאים'), utils.addCommas(d.counts.topics))
             // addToTable.if('נושאים - כולל מחוקים', utils.addCommas(d.topiccount), d.counts.topics != d.topiccount)
-            addToTable('פוסטים עם לייקים', utils.addCommas(d.counts.best))
-            addToTable('עוקבים', d.counts.followers)
-            addToTable('עוקב אחרי', d.counts.following)
-            addToTable('קבוצות', d.counts.groups)
-            $(d.groups).each((i, e) => addToTable(`קבוצה ${i + 1}`, e.name + (e.description ? ` (${e.description})` : '')))
+            addToTable(link(`${d.url}/best`, 'פוסטים עם לייקים'), utils.addCommas(d.counts.best))
+            addToTable(link(`${d.url}/followers`, 'עוקבים'), d.counts.followers)
+            addToTable(link(`${d.url}/following`, 'עוקב אחרי'), d.counts.following)
+            addToTable(link(`${d.url}/groups`, 'קבוצות'), d.counts.groups)
+            $(d.groups).each((i, e) => addToTable(`קבוצה ${i + 1}`, link(`/groups/${e.slug}`, e.name) + (e.description ? ` (${e.description})` : '')))
             $(d.sso).each((i, e) => addToTable(`משוייך ל${e.name}`, yn(e.associated)))
+            // addToTable.if(link(`/post/${d.latestPosts[0].pid}`, 'הפוסט האחרון'), d.latestPosts[0].content)
+            // addToTable.if(link(`/post/${d.bestPosts[0].pid}`, 'הפוסט עם הכי הרבה לייקים'), d.bestPosts[0].content)
 
             if (!d.isSelf) {
                 $('.table').append('<tr class="removeFromTable"><td colspan="2"></td></tr>')
