@@ -5,6 +5,8 @@
 // @grant        none
 // ==/UserScript==
 
+/* globals $, require, utils */
+
 const path = '/users-info', title = 'מידע משתמשים'
 
 $('#main-nav').append(
@@ -85,6 +87,8 @@ $(window).on('action:ajaxify.end', () => {
                 }
             })
         }))
-        setTimeout(() => document.title = document.title.replace('לא נמצא', title))
+        setTimeout(() => {
+            document.title = document.title.replace('לא נמצא', title)
+        })
     }
 })
