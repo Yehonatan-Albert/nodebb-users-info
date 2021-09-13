@@ -9,14 +9,7 @@
 
 const path = '/users-info', title = 'מידע משתמשים'
 
-$('#main-nav').append(
-    $(document.createElement('li')).append(
-        $(document.createElement('a')).addClass('navigation-link').attr({'href': path, 'title': '', 'data-original-title': title}).append(
-            $(document.createElement('i')).addClass('fa fa-fw fa-users-cog')
-        )
-    )
-)
-// $('#main-nav').append(`<li><a class="navigation-link" href="${path}" title="" data-original-title="${title}"><i class="fa fa-fw fa-users-cog"></i></a></li>`)
+$('#main-nav').append(`<li><a class="navigation-link" href="${path}" title="" data-original-title="${title}"><i class="fa fa-fw fa-users-cog"></i></a></li>`)
 
 $(window).on('action:ajaxify.end', () => {
     if (location.pathname == path) {
