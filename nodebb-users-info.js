@@ -15,9 +15,8 @@ $(window).on('action:ajaxify.end', () => {
     if (location.pathname == path) {
         const input = $(document.createElement('input')).addClass('form-control').attr('placeholder', 'חיפוש משתמש')
         const btnProfile = $(document.createElement('a')).addClass('btn btn-primary').css('display', 'none').attr('target', '_blank')
-        $('#content').empty().append(input, '<hr style="display:none">', btnProfile, `<hr style="display:none">
-        <table class="table table-bordered table-striped"><tr class="removeFromTable"></tr></table>
-        <table class="table table-bordered table-striped"><tr class="removeFromTable"></tr></table>`)
+        const table = '<table class="table table-bordered table-striped"><tr class="removeFromTable"></tr></table>'
+        $('#content').empty().append(input, '<br>', btnProfile, '<br>', table, table)
         input.focus()
 
         const addToTable = (key, value, index = 0) => $($('.table')[index]).append(`<tr class="removeFromTable"><th width="20%">${key}</th><td>${value}</td></tr>`)
@@ -34,7 +33,7 @@ $(window).on('action:ajaxify.end', () => {
             input.blur()
             $.getJSON(`/api/user/${ui.item.user.userslug}`, d => {
                 $('.removeFromTable').remove()
-                btnProfile.text(`הפרופיל של${d.isSelf ? 'י' : ` ${utils.decodeHTMLEntities(d.username)}`}`).attr('href', d.url).add('hr').css('display', 'block')
+                btnProfile.text(`הפרופיל של${d.isSelf ? 'י' : ` ${utils.decodeHTMLEntities(d.username)}`}`).attr('href', d.url).css('display', 'block')
 
                 addToTable('מזהה משתמש', d.uid)
                 addToTable('שם משתמש', d.username)
