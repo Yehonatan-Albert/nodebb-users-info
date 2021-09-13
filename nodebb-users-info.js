@@ -20,10 +20,10 @@ $(window).on('action:ajaxify.end', () => {
     if (location.pathname == path) {
         const input = $(document.createElement('input')).addClass('form-control').attr('placeholder', 'חיפוש משתמש')
         const btnProfile = $(document.createElement('a')).addClass('btn btn-primary').css('display', 'none').attr('target', '_blank')
-        $('#content').empty().append(input, '<hr style="display:none">', btnProfile, '<hr style="display:none"><table class="table table-bordered table-striped"><tr class="removeFromTable"></tr></table>')
+        $('#content').empty().append(input, '<hr style="display:none">', btnProfile, '<hr style="display:none"><table class="table table-bordered table-striped" id="table"><tr class="removeFromTable"></tr></table>')
         input.focus()
 
-        const addToTable = (key, value) => $('.table').append(`<tr class="removeFromTable"><th width="20%">${key}</th><td>${value}</td></tr>`)
+        const addToTable = (key, value) => $('#table').append(`<tr class="removeFromTable"><th width="20%">${key}</th><td>${value}</td></tr>`)
 
         const addToTableIf = (key, value, logic = value) => {
             if (logic) addToTable(key, value)
@@ -41,7 +41,7 @@ $(window).on('action:ajaxify.end', () => {
 
                 addToTable('מזהה משתמש', d.uid)
                 addToTable('שם משתמש', d.username)
-                addToTable('תיוג משתמש', `@${d.userslug}`)
+                addToTable('תיוג', `@${d.userslug}`)
                 addToTableIf('דוא"ל', link(`mailto:${d.email}`, d.email), d.email)
                 addToTable('דוא"ל אומת', yn(d["email:confirmed"]))
                 addToTableIf(link(d.picture, 'תמונת פרופיל'), `<img class="avatar avatar-xl" src="${d.picture}">`, d.picture)
@@ -77,7 +77,7 @@ $(window).on('action:ajaxify.end', () => {
                 // addToTableIf(link(`/post/${d.bestPosts[0].pid}`, 'הפוסט עם הכי הרבה לייקים'), d.bestPosts[0].content)
 
                 if (!d.isSelf) {
-                    $('.table').append('<tr class="removeFromTable"><td colspan="2"></td></tr>')
+                    $('#table').append('<tr class="removeFromTable"><td colspan="2"></td></tr>')
                     addToTable(`${d.username} חסום אצלי`, yn(d.isBlocked))
                     addToTable(`אני עוקב אחרי ${d.username}`, yn(d.isFollowing))
                     addToTable('צ\'אט', (d.hasPrivateChat ? `<button class="btn btn-default" style="margin-left:10px" onclick="app.openChat(${d.hasPrivateChat})">המשך צ'אט עם ${d.username}</button>` : '')
