@@ -37,7 +37,9 @@ $(window).on('action:ajaxify.end', () => {
 
                 addToTable('מזהה משתמש', d.uid)
                 addToTable('שם משתמש', d.username)
-                addToTable('תיוג', `@${d.userslug}<button class="btn btn-default" style="margin-right:10px" onclick="navigator.clipboard.writeText('@${d.userslug}');app.alertSuccess('התיוג הועתק')">העתק</button>`)
+                addToTable('תיוג', `@${d.userslug}
+                <button class="btn btn-default" style="margin-right:10px" onclick="navigator.clipboard.writeText('@${d.userslug}');app.alertSuccess('התיוג הועתק')">העתק</button>
+                <button class="btn btn-default" style="margin-right:10px" onclick="require(['composer'], c => c.newTopic({body: 'היי @${d.userslug}'}))">תייג את ${d.username}</button>`)
                 addToTableIf('דוא"ל', link(`mailto:${d.email}`, d.email), d.email)
                 addToTable('דוא"ל אומת', yn(d["email:confirmed"]))
                 addToTableIf(link(d.picture, 'תמונת פרופיל'), `<img class="avatar avatar-xl" src="${d.picture}">`, d.picture)
