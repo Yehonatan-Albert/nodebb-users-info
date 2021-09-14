@@ -37,7 +37,7 @@ $(window).on('action:ajaxify.end', () => {
 
                 addToTable('מזהה משתמש', d.uid)
                 addToTable('שם משתמש', d.username)
-                addToTable('תיוג', `@${d.userslug}`)
+                addToTable('תיוג', `@${d.userslug}<button class="btn btn-default" style="margin-right:10px" onclick="navigator.clipboard.writeText('@${d.userslug}');app.alertSuccess('התיוג הועתק')">העתק</button>`)
                 addToTableIf('דוא"ל', link(`mailto:${d.email}`, d.email), d.email)
                 addToTable('דוא"ל אומת', yn(d["email:confirmed"]))
                 addToTableIf(link(d.picture, 'תמונת פרופיל'), `<img class="avatar avatar-xl" src="${d.picture}">`, d.picture)
@@ -60,7 +60,9 @@ $(window).on('action:ajaxify.end', () => {
                 addToTable(link(`${d.url}/posts`, 'פוסטים'), utils.addCommas(d.counts.posts))
                 // addToTable('פוסטים מחוקים', utils.addCommas(d.postcount - d.counts.posts))
                 // addToTableIf('כל הפוסטים', utils.addCommas(d.postcount), d.postcount != d.counts.posts)
-                addToTable(link(`${d.url}/best`, 'פוסטים עם לייקים'), utils.addCommas(d.counts.best))
+                addToTable(link(`${d.url}/best`, 'פוסטים עם הצבעות'), utils.addCommas(d.counts.best))
+                addToTable('יחס מוניטין לעומת פוסטים', (d.reputation / d.counts.posts).toFixed(3))
+                addToTable('יחס פוסטים עם הצבעות', (d.counts.best / d.counts.posts).toFixed(3))
                 addToTable(link(`${d.url}/topics`, 'נושאים'), utils.addCommas(d.counts.topics))
                 // addToTable('נושאים מחוקים', utils.addCommas(d.topiccount - d.counts.topics))
                 // addToTableIf('כל הנושאים', utils.addCommas(d.topiccount), d.topiccount != d.counts.topics)
@@ -70,7 +72,7 @@ $(window).on('action:ajaxify.end', () => {
                 $(d.groups).each((i, e) => addToTable(`קבוצה ${i + 1}`, link(`/groups/${e.slug}`, e.name) + (e.description ? ` (${e.description})` : '')))
                 $(d.sso).each((i, e) => addToTable(`משוייך ל${e.name}`, yn(e.associated)))
                 // addToTableIf(link(`/post/${d.latestPosts[0].pid}`, 'הפוסט האחרון'), d.latestPosts[0].content)
-                // addToTableIf(link(`/post/${d.bestPosts[0].pid}`, 'הפוסט עם הכי הרבה לייקים'), d.bestPosts[0].content)
+                // addToTableIf(link(`/post/${d.bestPosts[0].pid}`, 'הפוסט עם הכי הרבה הצבעות'), d.bestPosts[0].content)
 
                 if (!d.isSelf) {
                     addToTable(`${d.username} חסום אצלי`, yn(d.isBlocked), 1)
