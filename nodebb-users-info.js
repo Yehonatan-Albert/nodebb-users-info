@@ -64,7 +64,7 @@ $(window).on('action:ajaxify.end', () => {
                 // addToTableIf('כל הפוסטים', utils.addCommas(d.postcount), d.postcount != d.counts.posts)
                 addToTable(link(`${d.url}/best`, 'פוסטים עם הצבעות'), utils.addCommas(d.counts.best))
                 addToTableIf('יחס מוניטין לעומת פוסטים', (d.reputation / d.counts.posts).toFixed(3), !isNaN(d.reputation / d.counts.posts))
-                addToTableIf('יחס פוסטים עם הצבעות', (d.counts.best / d.counts.posts).toFixed(3), !isNaN(d.reputation / d.counts.posts))
+                addToTableIf('יחס פוסטים עם הצבעות', (d.counts.best / d.counts.posts).toFixed(3), !isNaN(d.counts.best / d.counts.posts))
                 addToTable(link(`${d.url}/topics`, 'נושאים'), utils.addCommas(d.counts.topics))
                 // addToTable('נושאים מחוקים', utils.addCommas(d.topiccount - d.counts.topics))
                 // addToTableIf('כל הנושאים', utils.addCommas(d.topiccount), d.topiccount != d.counts.topics)
