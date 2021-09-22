@@ -42,6 +42,8 @@ $(window).on('action:ajaxify.end', () => {
                 <button class="btn btn-default" style="margin-right:10px" onclick="require(['composer'], c => c.newTopic({body: 'היי @${d.userslug}'}))">תייג את ${d.username}</button>`)
                 addToTableIf('דוא"ל', link(`mailto:${d.email}`, d.email), d.email)
                 addToTable('דוא"ל אומת', yn(d["email:confirmed"]))
+                addToTable('תאריך הצטרפות', new Date(d.joindate).toLocaleString().replaceAll('.', '/'))
+                addToTable('התחבר לאחרונה', new Date(d.lastonline).toLocaleString().replaceAll('.', '/'))
                 addToTableIf(link(d.picture, 'תמונת פרופיל'), `<img class="avatar avatar-xl" src="${d.picture}">`, d.picture)
                 addToTable('סמל', `<div class="avatar avatar-xl" style="background:${d["icon:bgColor"]}">${d["icon:text"]}</div>`)
                 addToTableIf('שם מלא', d.fullname)
